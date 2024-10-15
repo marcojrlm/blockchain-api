@@ -2,26 +2,23 @@ package com.blockchain.api.Entity;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.util.Date;
 
 public class Block {
     private final int id;
     private int nonce;
-    private final String data;
+    private String data;
     private String hash;
-    private final String previousHash;
-    private final long timestamp;
+    private String previousHash;
 
     public Block(int id, String data, String previousHash) {
         this.id = id;
         this.data = data;
         this.previousHash = previousHash;
-        this.timestamp = new Date().getTime();
         this.hash = calculateHash();
     }
 
     public String calculateHash() {
-        String input = id + previousHash + Long.toString(timestamp) + Integer.toString(nonce) + data;
+        String input = id + previousHash + Integer.toString(nonce) + data;
         return applySHA256(input);
     }
 
@@ -52,8 +49,33 @@ public class Block {
         System.out.println("Block generated! " + hash);
     }
 
+    public boolean isValidHash(int difficulty) {
+        String calculatedHash = calculateHash();
+
+        String target = new String(new char[difficulty]).replace('\0', '0');
+        System.out.println(difficulty);
+        return hash.equals(calculatedHash) && hash.substring(0, difficulty).equals(target);
+    }
+
     public int getId() {
         return id;
+
+    }
+
+    public void setNonce(int nonce) {
+        this.nonce = nonce;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    public void setHash() {
+        this.hash = this.calculateHash();
+    }
+
+    public void setPreviousHash(String hash) {
+        this.previousHash = hash;
     }
 
     public int getNonce() {
@@ -72,12 +94,8 @@ public class Block {
         return previousHash;
     }
 
-    public long getTimestamp() {
-        return timestamp;
-    }
-
     @Override
     public String toString() {
-        return "Block{" + "id=" + id + ", nonce=" + nonce + ", data='" + data + '\'' + ", hash='" + hash + '\'' + ", previousHash='" + previousHash + '\'' + ", timestamp=" + timestamp + '}';
+        return "Block{" + "id=" + id + ", nonce=" + nonce + ", data='" + data + '\'' + ", hash='" + hash + '\'' + ", previousHash='" + previousHash + '\'' + '}';
     }
 }
