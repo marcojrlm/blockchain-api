@@ -57,6 +57,7 @@ public class BlockChainController {
         }
         block.setData(blockRequest.getData());
         block.setPreviousHash(previousHash);
+        block.setHash();
         block.mineBlock(difficulty);
         return ResponseEntity.status(200).body(block);
     }

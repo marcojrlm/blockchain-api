@@ -51,7 +51,6 @@ public class Block {
 
     public boolean isValidHash(int difficulty) {
         String calculatedHash = calculateHash();
-
         String target = new String(new char[difficulty]).replace('\0', '0');
         System.out.println(difficulty);
         return hash.equals(calculatedHash) && hash.substring(0, difficulty).equals(target);
@@ -59,7 +58,6 @@ public class Block {
 
     public int getId() {
         return id;
-
     }
 
     public void setNonce(int nonce) {
